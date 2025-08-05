@@ -12,6 +12,7 @@
             <button class="btn btn-outline-secondary" onclick="filterProjects('Elektrik')">Elektrik</button>
             <button class="btn btn-outline-secondary" onclick="filterProjects('SU')">SU</button>
             <button class="btn btn-outline-secondary" onclick="filterProjects('doğal gaz')">doğal gaz</button>
+            <button class="btn btn-outline-secondary" onclick="filterProjects('inşaat')">İnşaat</button>
             <button class="btn btn-outline-secondary" onclick="filterProjects('devam_eden')">Devam Eden</button>
             <button class="btn btn-outline-secondary" onclick="filterProjects('tamamlanan')">Tamamlanan</button>
 
@@ -49,7 +50,7 @@
     let selectedStatus = 'all';
 
     function filterProjects(filter) {
-        if (['Mekanik', 'Elektrik', 'SU', ''].includes(filter)) {
+        if (['Mekanik', 'Elektrik', 'SU', 'Doğal gaz' ,'inşaat'].includes(filter)) {
             selectedCategory = filter;
         } else {
             selectedStatus = filter;
