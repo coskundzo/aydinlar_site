@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.title }} - {{ content_type|title }} Detayı{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0">
+                <img src="{{ item.image_url or url_for('static', filename='images/default.jpg') }}"
+                    class="card-img-top rounded" alt="{{ item.title }}" style="height: 400px; object-fit: cover;">
+
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="card-title h2 mb-0">{{ item.title }}</h1>
+
+                        <!-- İçerik tipine göre farklı badge'ler -->
+                        {% if content_type == 'project' %}
+                        <span class="badge bg-{{ 'success' if item.status == 'tamamlanan' else 'warning' }} fs-6">
+                            {{ 'Tamamlandı' if item.status == 'tamamlanan' else 'Devam Ediyor' }}
+                        </span>
+                        {% elif content_type == 'product' %}
+                        <span class="badge bg-primary fs-6">Ürün</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-text">
+                        <p class="lead">{{ item.description }}</p>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- İçerik tipine göre farklı bilgiler -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>
+                                {% if content_type == 'project' %}Proje Bilgileri
+                                {% elif content_type == 'product' %}Ürün Bilgileri
+                                {% else %}Bilgiler{% endif %}
+                            </h5>
+                            <ul class="list-unstyled">
+                                {% if content_type == 'project' %}
+                                <li><strong>Durum:</strong>
+                                    {{ 'Tamamlandı' if item.status == 'tamamlanan' else 'Devam Ediyor' }}
+                                </li>
+                                <li><strong>Proje ID:</strong> #{{ item.id }}</li>
+                                {% elif content_type == 'product' %}
+                                <li><strong>Ürün Kodu:</strong> #{{ item.id }}</li>
+                                <li><strong>Kategori:</strong> İnşaat Malzemesi</li>
+                                {% endif %}
+                                <li><strong>Sıra:</strong> {{ item.order_index }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>İletişim</h5>
+                            <p>Bu {{ content_type|replace('project', 'proje')|replace('product', 'ürün') }} hakkında
+                                daha fazla bilgi almak için bizimle iletişime geçin.</p>
+                            <a href="{{ url_for('contact') }}" class="btn btn-primary">İletişime Geç</a>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        {% if content_type == 'project' %}
+                        <a href="{{ url_for('projects') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Tüm Projelere Dön
+                        </a>
+                        {% elif content_type == 'product' %}
+                        <a href="{{ url_for('products') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Tüm Ürünlere Dön
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Ana Sayfaya Dön
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

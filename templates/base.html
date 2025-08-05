@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}İnşaat Malzemeleri{% endblock %}</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='20' height='20' fill='%23f8f9fa'/%3E%3Ccircle cx='10' cy='10' r='2' fill='%23e0e0e0'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+        }
+
+        .footer-hidden {
+            transform: translateY(100%);
+            transition: transform 0.4s;
+        }
+
+        .footer-visible {
+            transform: translateY(0);
+            transition: transform 0.4s;
+        }
+
+        footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 1030;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height: 150px;">
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Ana Sayfa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">Hakkımızda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">Ürünler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/projects">Projeler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">İletişim</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/bayilik">Bayilikler</a>
+                    </li>
+                </ul>
+                <!-- Sağ üst köşe: Arama ve Giriş/Kayıt -->
+                <form action="/search" method="get" class="d-flex ms-auto" style="max-width: 300px;">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Arama..." aria-label="Arama">
+                    <button class="btn btn-outline-success" type="submit">Ara</button>
+                </form>
+                {% if session.get('username') %}
+                <div class="d-flex align-items-center ms-3">
+                    <span class="badge rounded-pill bg-primary me-2" style="font-size:1rem; padding: 0.6em 1em;">
+                        <i class="bi bi-person-circle me-1"></i>
+                        {{ session['username'] }}
+                    </span>
+                    {% if is_admin %}
+                    <a href="/admin" class="btn btn-warning btn-sm me-2">
+                        <i class="bi bi-gear"></i> Yönetim Paneli</a>
+                    
+                    {% endif %}
+                    <a href="/logout" class="btn btn-outline-danger btn-sm">Çıkış Yap</a>
+                </div>
+                {% else %}
+                <a href="/login" class="btn btn-outline-primary ms-2">Giriş</a>
+                <a href="/signup" class="btn btn-primary ms-2">Kayıt</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    
+
+    <!-- Main Content -->
+    <div class="container my-5" style="padding-bottom: 160px;">
+        {% block content %}{% endblock %}
+        {% if request.path == '/search' %}
+        <div class="alert alert-info mt-3">
+            Arama yapıldı: "{{ query }}"
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer id="mainFooter" class="bg-dark text-white pt-4 pb-2 mt-5 footer-hidden">
+        <div class="container">
+            <div class="row text-center text-md-start">
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-uppercase">Firmanız</h5>
+                    <p>1997'den beri güven ve kaliteyle ticarette 2006'dan bu güne kadar'da inşaat sektöründe hizmetinizdeyiz.</p>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-uppercase">İletişim</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt"></i>Batıkent mah,kürşat,tüzmen bulvarı,açelya apartmanı altı,Şehitkamil Gaziantep</li>
+                        <li><i class="bi bi-telephone"></i> +90 342 322 19 33</li>
+                        <li><i class="bi bi-envelope"></i> aydinlarinsaat@hotmail.com.tr</li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-uppercase">Sosyal Medya</h5>
+                    <a href="#" class="text-white me-3"><i class="bi bi-facebook fs-4"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-4"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-linkedin fs-4"></i></a>
+                </div>
+            </div>
+            <hr class="bg-secondary">
+            <div class="text-center small">
+                © 2025 Firmanız. Tüm Hakları Saklıdır.
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script>
+        // Footer'ı sadece en alta inince göster
+        window.addEventListener('scroll', function () {
+            var footer = document.getElementById('mainFooter');
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+                footer.classList.remove('footer-hidden');
+                footer.classList.add('footer-visible');
+            } else {
+                footer.classList.remove('footer-visible');
+                footer.classList.add('footer-hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>

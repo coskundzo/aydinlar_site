@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Arama Sonuçları{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2>Arama Sonuçları: "{{ query }}"</h2>
+    {% if results %}
+        <div class="row g-3">
+            {% for item in results %}
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img src="{{ item.image_url or url_for('static', filename='images/default.jpg') }}" class="card-img-top" alt="{{ item.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <p class="card-text">{{ item.description[:100] }}...</p>
+                        <a href="{{ url_for('detail', content_type=item.section, item_id=item.id) }}" class="btn btn-primary">Detay</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Arama kriterlerinize uygun sonuç bulunamadı.</p>
+    {% endif %}
+</div>
+{% endblock %}

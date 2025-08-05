@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Projelerimiz{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Filtre Butonları -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <button class="btn btn-primary active" onclick="filterProjects('all')">Tümü</button>
+            <button class="btn btn-outline-secondary" onclick="filterProjects('Mekanik')">Mekanik</button>
+            <button class="btn btn-outline-secondary" onclick="filterProjects('Elektrik')">Elektrik</button>
+            <button class="btn btn-outline-secondary" onclick="filterProjects('SU')">SU</button>
+            <button class="btn btn-outline-secondary" onclick="filterProjects('doğal gaz')">doğal gaz</button>
+            <button class="btn btn-outline-secondary" onclick="filterProjects('devam_eden')">Devam Eden</button>
+            <button class="btn btn-outline-secondary" onclick="filterProjects('tamamlanan')">Tamamlanan</button>
+
+
+        </div>
+    </div>
+
+    <!-- Projeler -->
+    <div class="row g-4">
+        {% for project in projects %}
+        <div class="col-md-3 col-sm-6 project-item"
+             data-category="{{ project.category }}"
+             data-status="{{ project.status }}">
+            <div class="card border-0 h-100" style="cursor: pointer;"
+                 onclick="location.href='{{ url_for('detail', content_type='project', item_id=project.id) }}'">
+                <img src="{{ project.image_url or url_for('static', filename='images/default.jpg') }}"
+                     class="card-img-top" alt="{{ project.title }}">
+                <div class="card-body text-center">
+                    <h6 class="card-title">{{ project.title }}</h6>
+                    <p class="card-text small">{{ project.description }}</p>
+                    <!-- Kategori ve Durum Bilgisi -->
+                    <span class="badge bg-info me-1">{{ project.category }}</span>
+                    <span class="badge bg-{{ 'success' if project.status == 'tamamlanan' else 'warning' }}">
+                        {{ 'Tamamlandı' if project.status == 'tamamlanan' else 'Devam Ediyor' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    let selectedCategory = 'all';
+    let selectedStatus = 'all';
+
+    function filterProjects(filter) {
+        if (['Mekanik', 'Elektrik', 'SU', ''].includes(filter)) {
+            selectedCategory = filter;
+        } else {
+            selectedStatus = filter;
+        }
+
+        const projects = document.querySelectorAll('.project-item');
+        projects.forEach(project => {
+            const category = project.getAttribute('data-category');
+            const status = project.getAttribute('data-status');
+            const categoryMatch = (selectedCategory === 'all' || category === selectedCategory);
+            const statusMatch = (selectedStatus === 'all' || status === selectedStatus);
+
+            if (categoryMatch && statusMatch) {
+                project.style.display = 'block';
+            } else {
+                project.style.display = 'none';
+            }
+        });
+
+        // Buton stillerini güncelle
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(btn => {
+            btn.classList.remove('btn-primary', 'active');
+            btn.classList.add('btn-outline-secondary');
+        });
+        event.target.classList.add('btn-primary', 'active');
+        event.target.classList.remove('btn-outline-secondary');
+    }
+</script>
+{% endblock %}

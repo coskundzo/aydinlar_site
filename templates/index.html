@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Ana Sayfa{% endblock %}
+
+{% block content %}
+
+<!-- Bootstrap Carousel Slider -->
+<div id="mainCarousel" class="carousel slide mb-5 mx-auto" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        {% for slider in sliders %}
+        <div class="carousel-item {% if loop.first %}active{% endif %}">
+            <img src="{{ slider.image_url }}" class="d-block w-100" alt="{{ slider.title }}">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ slider.title }}</h5>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Eğer slider yoksa default resimler -->
+        {% if not sliders %}
+        <div class="carousel-item active">
+            <img src="{{ url_for('static', filename='images/slider1.png') }}" class="d-block w-100" alt="Slider 1">
+            <div class="carousel-caption d-none d-md-block"></div>
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/slider2.png') }}" class="d-block w-100" alt="Slider 2">
+            <div class="carousel-caption d-none d-md-block"></div>
+        </div>
+        <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/slider3.png') }}" class="d-block w-100" alt="Slider 3">
+            <div class="carousel-caption d-none d-md-block"></div>
+        </div>
+        {% endif %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3 shadow"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle p-3 shadow"></span>
+    </button>
+</div>
+
+<!-- Dynamic GridView Kartlar -->
+<div class="container my-5">
+    <div class="row g-3">
+        {% for card in cards %}
+        <div class="col-lg-3 col-md-3 col-sm-5 col-6">
+            <div class="card h-100 shadow-sm">
+                <img class="card-img-top" src="{{ card.image_url or url_for('static', filename='images/default.jpg') }}"
+                    alt="{{ card.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ card.title }}</h5>
+                    <p class="card-text">{{ card.description }}</p>
+                    <a href="#" class="btn btn-primary">Detay</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

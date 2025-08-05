@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Admin Panel</h2>
+
+    <!-- Flash mesajları -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- Admin Menü -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Yönetim Menüsü</h4>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" onclick="showSection('cards')">Ana Sayfa
+                            Kartları</button>
+                        <button type="button" class="btn btn-secondary" onclick="showSection('slider')">Slider
+                            Yönetimi</button>
+                        <button type="button" class="btn btn-info" onclick="showSection('products')">Ürün
+                            Yönetimi</button>
+                        <button type="button" class="btn btn-warning" onclick="showSection('projects')">Proje
+                            Yönetimi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana Sayfa Kartları Yönetimi -->
+    <div id="cards-section" class="admin-section">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Ana Sayfa Kartları</h4>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCardModal">
+                    Yeni Kart Ekle
+                </button>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Başlık</th>
+                                <th>Açıklama</th>
+                                <th>Resim</th>
+                                <th>Sıra</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for card in cards %}
+                            <tr>
+                                <td>{{ card.id }}</td>
+                                <td>{{ card.title }}</td>
+                                <td>{{ card.description[:50] }}...</td>
+                                <td>{{ card.image_url }}</td>
+                                <td>{{ card.order_index }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning"
+                                        onclick="editCard( card.id )">Düzenle</button>
+                                    <a href="/admin/delete_card/{{ card.id }}" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slider Yönetimi -->
+    <div id="slider-section" class="admin-section" style="display: none;">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Slider Yönetimi</h4>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSliderModal">
+                    Yeni Slider Ekle
+                </button>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Başlık</th>
+                                <th>Resim</th>
+                                <th>Sıra</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for slider in sliders %}
+                            <tr>
+                                <td>{{ slider.id }}</td>
+                                <td>{{ slider.title }}</td>
+                                <td>{{ slider.image_url }}</td>
+                                <td>{{ slider.order_index }}</td>
+                                <td>
+                                    <a href="/admin/delete_slider/{{ slider.id }}" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ürün Yönetimi -->
+    <div id="products-section" class="admin-section" style="display: none;">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Ürün Yönetimi</h4>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                    Yeni Ürün Ekle
+                </button>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Başlık</th>
+                                <th>Açıklama</th>
+                                <th>Resim</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td>{{ product.id }}</td>
+                                <td>{{ product.title }}</td>
+                                <td>{{ product.description[:50] }}...</td>
+                                <td>{{ product.image_url }}</td>
+                                <td>
+                                    <a href="/admin/delete_product/{{ product.id }}" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proje Yönetimi -->
+    <div id="projects-section" class="admin-section" style="display: none;">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Proje Yönetimi</h4>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+                    Yeni Proje Ekle
+                </button>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Başlık</th>
+                                <th>Açıklama</th>
+                                <th>Resim</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in projects %}
+                            <tr>
+                                <td>{{ project.id }}</td>
+                                <td>{{ project.title }}</td>
+                                <td>{{ project.description[:50] }}...</td>
+                                <td>{{ project.image_url }}</td>
+                                <td>
+                                    <a href="/admin/delete_project/{{ project.id }}" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal'lar -->
+<!-- Kart Ekleme Modal -->
+<div class="modal fade" id="addCardModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Kart Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/admin/add_card" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Başlık:</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Açıklama:</label>
+                        <textarea name="description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Resim URL:</label>
+                        <input type="text" name="image_url" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sıra:</label>
+                        <input type="number" name="order_index" class="form-control" value="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Slider Ekleme Modal -->
+<div class="modal fade" id="addSliderModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Slider Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/admin/add_slider" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Başlık:</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Resim URL:</label>
+                        <input type="text" name="image_url" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sıra:</label>
+                        <input type="number" name="order_index" class="form-control" value="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Ürün Ekleme Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Ürün Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/admin/add_product" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Başlık:</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Açıklama:</label>
+                        <textarea name="description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Resim URL:</label>
+                        <input type="text" name="image_url" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Proje Ekleme Modal -->
+<div class="modal fade" id="addProjectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Proje Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/admin/add_project" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Başlık:</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Açıklama:</label>
+                        <textarea name="description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Resim URL:</label>
+                        <input type="text" name="image_url" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kategori:</label>
+                        <select name="category" class="form-select" required>
+                            <option value="" disabled selected>Seçiniz</option>
+                            <option value="Mekanik">Mekanik</option>
+                            <option value="Elektrik">Elektrik</option>
+                            <option value="SU">SU</option>
+                            <option value="Doğal gaz">Doğal gaz</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Durum:</label>
+                        <select name="status" class="form-select" required>
+                            <option value="" disabled selected>Seçiniz</option>
+                            <option value="devam_eden">Devam Eden</option>
+                            <option value="tamamlanan">Tamamlanan</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showSection(sectionName) {
+        // Tüm bölümleri gizle
+        document.querySelectorAll('.admin-section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Seçilen bölümü göster
+        document.getElementById(sectionName + '-section').style.display = 'block';
+
+        // Buton stillerini güncelle
+        document.querySelectorAll('.btn-group .btn').forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-secondary');
+        });
+        event.target.classList.remove('btn-secondary');
+        event.target.classList.add('btn-primary');
+    }
+
+    function editCard(cardId) {
+        alert('Düzenleme özelliği yakında eklenecek!');
+    }
+</script>
+{% endblock %}

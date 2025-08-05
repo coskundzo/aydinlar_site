@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>Proje Düzenle</h3>
+<form method="post">
+    <div class="mb-3">
+        <label>Başlık:</label>
+        <input type="text" name="title" class="form-control" value="{{ project.title }}" required>
+    </div>
+    <div class="mb-3">
+        <label>Açıklama:</label>
+        <textarea name="description" class="form-control" required>{{ project.description }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label>Resim URL:</label>
+        <input type="text" name="image_url" class="form-control" value="{{ project.image_url }}" required>
+    </div>
+    <div class="mb-3">
+        <label>Kategori:</label>
+        <select name="category" class="form-control" required>
+            <option value="Mekanik" {% if project.category == 'Mekanik' %}selected{% endif %}>Mekanik</option>
+            <option value="Elektrik" {% if project.category == 'Elektrik' %}selected{% endif %}>Elektrik</option>
+            <option value="SU" {% if project.category == 'SU' %}selected{% endif %}>SU</option>
+            <option value="Doğal gaz" {% if project.category == 'Doğal gaz' %}selected{% endif %}>Doğal gaz</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Durum:</label>
+        <select name="status" class="form-control" required>
+            <option value="devam_eden" {% if project.status == 'devam_eden' %}selected{% endif %}>Devam Eden</option>
+            <option value="tamamlanan" {% if project.status == 'tamamlanan' %}selected{% endif %}>Tamamlanan</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Kaydet</button>
+</form>
+{% endblock %}
