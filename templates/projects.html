@@ -11,7 +11,7 @@
             <button class="btn btn-outline-secondary" onclick="filterProjects('Mekanik')">Mekanik</button>
             <button class="btn btn-outline-secondary" onclick="filterProjects('Elektrik')">Elektrik</button>
             <button class="btn btn-outline-secondary" onclick="filterProjects('SU')">SU</button>
-            <button class="btn btn-outline-secondary" onclick="filterProjects('doğal gaz')">doğal gaz</button>
+            <button class="btn btn-outline-secondary" onclick="filterProjects('Doğal gaz')">Doğal gaz</button>
             <button class="btn btn-outline-secondary" onclick="filterProjects('devam_eden')">Devam Eden</button>
             <button class="btn btn-outline-secondary" onclick="filterProjects('tamamlanan')">Tamamlanan</button>
 
@@ -22,13 +22,12 @@
     <!-- Projeler -->
     <div class="row g-4">
         {% for project in projects %}
-        <div class="col-md-3 col-sm-6 project-item"
-             data-category="{{ project.category }}"
-             data-status="{{ project.status }}">
+        <div class="col-md-3 col-sm-6 project-item" data-category="{{ project.category }}"
+            data-status="{{ project.status }}">
             <div class="card border-0 h-100" style="cursor: pointer;"
-                 onclick="location.href='{{ url_for('detail', content_type='project', item_id=project.id) }}'">
+                onclick="location.href='{{ url_for('detail', content_type='project', item_id=project.id) }}'">
                 <img src="{{ project.image_url or url_for('static', filename='images/default.jpg') }}"
-                     class="card-img-top" alt="{{ project.title }}">
+                    class="card-img-top" alt="{{ project.title }}">
                 <div class="card-body text-center">
                     <h6 class="card-title">{{ project.title }}</h6>
                     <p class="card-text small">{{ project.description }}</p>
@@ -49,9 +48,15 @@
     let selectedStatus = 'all';
 
     function filterProjects(filter) {
-        if (['Mekanik', 'Elektrik', 'SU', ''].includes(filter)) {
+        // Kategorileri kontrol et
+        if (['Mekanik', 'Elektrik', 'SU', 'Doğal gaz'].includes(filter)) {
             selectedCategory = filter;
+        } else if (filter === 'all') {
+            // Tümü seçildiğinde hem kategori hem status'u sıfırla
+            selectedCategory = 'all';
+            selectedStatus = 'all';
         } else {
+            // Status filtreleri (devam_eden, tamamlanan)
             selectedStatus = filter;
         }
 
@@ -59,9 +64,21 @@
         projects.forEach(project => {
             const category = project.getAttribute('data-category');
             const status = project.getAttribute('data-status');
-            const categoryMatch = (selectedCategory === 'all' || category === selectedCategory);
-            const statusMatch = (selectedStatus === 'all' || status === selectedStatus);
 
+            let categoryMatch = true;
+            let statusMatch = true;
+
+            // Kategori eşleşmesini kontrol et
+            if (selectedCategory !== 'all') {
+                categoryMatch = (category === selectedCategory);
+            }
+
+            // Status eşleşmesini kontrol et
+            if (selectedStatus !== 'all') {
+                statusMatch = (status === selectedStatus);
+            }
+
+            // Hem kategori hem status eşleşirse göster
             if (categoryMatch && statusMatch) {
                 project.style.display = 'block';
             } else {
@@ -75,8 +92,12 @@
             btn.classList.remove('btn-primary', 'active');
             btn.classList.add('btn-outline-secondary');
         });
-        event.target.classList.add('btn-primary', 'active');
-        event.target.classList.remove('btn-outline-secondary');
+
+        // Tıklanan butonu aktif yap
+        if (event && event.target) {
+            event.target.classList.add('btn-primary', 'active');
+            event.target.classList.remove('btn-outline-secondary');
+        }
     }
 </script>
 {% endblock %}
