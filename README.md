@@ -6,7 +6,6 @@ Bu proje, Aydınlar İnşaat şirketi için geliştirilmiş Flask tabanlı bir w
 
 - 🏠 Ana sayfa slider ve kart yönetimi
 - 🏗️ Proje yönetimi (Mekanik, Elektrik, Su, Doğal Gaz kategorileri)
-- 📦 Ürün yönetimi
 - 👥 Kullanıcı kayıt ve giriş sistemi
 - 🔐 Admin panel (sadece admin kullanıcılar için)
 - 📱 Responsive tasarım

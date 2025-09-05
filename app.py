@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from models import db, User, Content, Product, Project
+from models import db, User, Content, Product, Project, Contact
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -56,6 +56,31 @@ def products():
 def contact():
     return render_template('contact.html')
 
+@app.route('/iletisim', methods=['POST'])
+def iletisim():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        
+        # İletişim verisini veritabanına kaydet
+        try:
+            contact = Contact(
+                name=name,
+                email=email,
+                message=message
+            )
+            db.session.add(contact)
+            db.session.commit()
+            flash(f'Merhaba {name}, mesajınız başarıyla kaydedildi! En kısa sürede size dönüş yapacağız.')
+        except Exception as e:
+            db.session.rollback()
+            flash('Mesajınız kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.')
+            
+        return redirect(url_for('contact'))
+    
+    return redirect(url_for('contact'))
+
 @app.route('/projects')
 def projects():
     projects = Content.query.filter_by(section='project').all()
@@ -110,19 +135,6 @@ def add_product():
     description = request.form['description']
     image_url = request.form['image_url']
     
-    # Content tablosuna ürün olarak ekle
-    product = Content(
-        title=title,
-        description=description,
-        image_url=image_url,
-        section='product',
-        order_index=0
-    )
-    db.session.add(product)
-    db.session.commit()
-    flash('Ürün başarıyla eklendi!')
-    return redirect(url_for('admin'))
-
 @app.route('/admin/add_project', methods=['POST'])
 @admin_required
 def add_project():
@@ -183,15 +195,6 @@ def add_slider():
     db.session.add(slider)
     db.session.commit()
     flash('Slider başarıyla eklendi!')
-    return redirect(url_for('admin'))
-
-@app.route('/admin/delete_product/<int:id>')
-@admin_required
-def delete_product(id):
-    product = Content.query.filter_by(id=id, section='product').first_or_404()
-    db.session.delete(product)
-    db.session.commit()
-    flash('Ürün silindi!')
     return redirect(url_for('admin'))
 
 @app.route('/admin/delete_project/<int:id>')
@@ -259,6 +262,27 @@ def edit_project(id):
         flash('Proje güncellendi!')
         return redirect(url_for('admin'))
     return render_template('edit_project.html', project=project)
+
+@app.route('/admin/edit_card/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def edit_card(id):
+    card = Content.query.filter_by(id=id, section='card').first_or_404()
+    if request.method == 'POST':
+        card.title = request.form['title']
+        card.description = request.form['description']
+        card.image_url = request.form['image_url']
+        card.order_index = request.form.get('order_index', card.order_index, type=int)
+        db.session.commit()
+        flash('Kart başarıyla güncellendi!')
+        return redirect(url_for('admin'))
+    # GET isteği için kart verilerini JSON olarak döndür
+    return {
+        'id': card.id,
+        'title': card.title,
+        'description': card.description,
+        'image_url': card.image_url,
+        'order_index': card.order_index
+    }
 
 if __name__ == '__main__':
     with app.app_context():

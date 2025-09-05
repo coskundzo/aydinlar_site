@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -35,3 +36,14 @@ class Project(db.Model):
     image_url = db.Column(db.String(300))
     status = db.Column(db.String(50), default='devam_eden')  # 'tamamlanan', 'devam_eden'
     category = db.Column(db.String(100))
+
+class Contact(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_read = db.Column(db.Boolean, default=False)
+    
+    def __repr__(self):
+        return f'<Contact {self.name} - {self.email}>'

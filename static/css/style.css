@@ -1,3 +1,141 @@
+@media (max-width: 768px) {
+    footer {
+        position: static !important;
+        bottom: auto !important;
+        width: 100% !important;
+    }
+
+    .footer-hidden,
+    .footer-visible {
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* Mobilde navbar'ı zorla ortala */
+@media (max-width: 767.98px) {
+    .navbar-collapse .navbar-nav {
+        text-align: center !important;
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .navbar-collapse .navbar-nav .nav-item {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    .navbar-collapse .navbar-nav .nav-item .nav-link {
+        text-align: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 0.75rem 0 !important;
+    }
+
+    .navbar-collapse .ms-auto {
+        margin: 0 auto !important;
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+}
+
+/* Mobil uyumluluk için ek ayarlar */
+@media (max-width: 768px) {
+
+    .container,
+    .container-fluid {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .card,
+    .p-4 {
+        padding: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    h2,
+    h3 {
+        font-size: 1.5rem !important;
+    }
+
+    .navbar .logo img {
+        max-height: 60px !important;
+    }
+
+    /* Navbar mobil optimizasyonları */
+    .navbar-brand img {
+        max-height: 45px !important;
+    }
+
+    .navbar-collapse {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+    }
+
+    /* Mobilde navbar menü başlıklarını ortala */
+    .navbar-nav {
+        text-align: center !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100% !important;
+        text-align: center !important;
+        display: block !important;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.5rem 0 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        text-align: center !important;
+        display: block !important;
+        width: 100% !important;
+        margin: 0 auto !important;
+    }
+
+    /* Arama formu ve giriş butonları da ortada olsun */
+    .navbar-collapse>form,
+    .navbar-collapse .d-flex {
+        justify-content: center !important;
+        text-align: center !important;
+        margin: 0 auto !important;
+    }
+
+    .d-flex.flex-column.flex-lg-row {
+        width: 100%;
+    }
+
+    .d-flex.flex-column.flex-lg-row form {
+        margin-bottom: 1rem;
+        min-width: 100% !important;
+    }
+
+    .badge.rounded-pill {
+        font-size: 0.8rem !important;
+        padding: 0.4em 0.8em !important;
+        margin-bottom: 0.5rem;
+    }
+
+    .btn-sm {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+}
+
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='20' height='20' fill='%23f8f9fa'/%3E%3Ccircle cx='10' cy='10' r='2' fill='%23e0e0e0'/%3E%3C/svg%3E");
@@ -10,16 +148,20 @@ footer {
     overflow: hidden;
     text-shadow: 0 2px 8px #007bff22;
 }
+
 footer::before {
     content: "";
     position: absolute;
-    left: 0; right: 0; top: -30px;
+    left: 0;
+    right: 0;
+    top: -30px;
     height: 40px;
     background: url('data:image/svg+xml;utf8,<svg width="100%" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 20 Q 30 40 60 20 T 120 20 V40 H0 Z" fill="%23fff" opacity="0.2"/></svg>');
     background-repeat: repeat-x;
     z-index: 0;
 }
-footer > .container {
+
+footer>.container {
     position: relative;
     z-index: 1;
 }
@@ -29,33 +171,38 @@ footer > .container {
 }
 
 .card {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s, box-shadow 0.2s;
     border-radius: 18px;
     animation: fadeInUp 0.7s;
 }
+
 .card:hover {
     transform: translateY(-6px) scale(1.03);
-    box-shadow: 0 0 40px #00c6ff88, 0 12px 32px rgba(0,0,0,0.22);
+    box-shadow: 0 0 40px #00c6ff88, 0 12px 32px rgba(0, 0, 0, 0.22);
     border-color: #00c6ff;
     background: linear-gradient(120deg, #f8f9fa 80%, #e0eaff 100%);
     transition: border-color 0.3s;
 }
 
-.btn-primary, .btn-outline-secondary {
+.btn-primary,
+.btn-outline-secondary {
     transition: background 0.3s, color 0.3s;
 }
+
 .btn-primary {
     box-shadow: 0 0 12px #00c6ff80;
     border-image: linear-gradient(90deg, #007bff, #00c6ff) 1;
     border-width: 2px;
     border-style: solid;
 }
+
 .btn-primary:hover {
     background: linear-gradient(90deg, #007bff 60%, #00c6ff 100%);
     color: #fff;
     box-shadow: 0 0 24px #00c6ffcc;
 }
+
 .btn-outline-secondary:hover {
     background: linear-gradient(90deg, #e0eaff 0%, #f8f9fa 100%);
     color: #007bff;
@@ -63,21 +210,24 @@ footer > .container {
 }
 
 .btn {
-    box-shadow: 0 2px 6px rgba(0,123,255,0.08);
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.08);
 }
+
 .btn:active {
-    box-shadow: 0 1px 2px rgba(0,123,255,0.18);
+    box-shadow: 0 1px 2px rgba(0, 123, 255, 0.18);
     animation: bounce 0.3s;
 }
 
-h2, h3, h4 {
+h2,
+h3,
+h4 {
     background: linear-gradient(90deg, #007bff, #00c6ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .navbar {
-    background: rgba(33,37,41,0.85);
+    background: rgba(33, 37, 41, 0.85);
     backdrop-filter: blur(4px);
 }
 
@@ -90,10 +240,13 @@ h2, h3, h4 {
     background: linear-gradient(90deg, #00c6ff 0%, #007bff 100%);
     color: #fff;
 }
-.badge.bg-success, .badge.bg-warning {
+
+.badge.bg-success,
+.badge.bg-warning {
     background: linear-gradient(90deg, #28a745 0%, #ffc107 100%);
     color: #fff;
 }
+
 .badge {
     box-shadow: 0 0 8px #00c6ff44;
 }
@@ -101,6 +254,7 @@ h2, h3, h4 {
 .card-img-top {
     transition: transform 0.4s;
 }
+
 .card:hover .card-img-top {
     transform: scale(1.07);
 }
@@ -110,19 +264,27 @@ h2, h3, h4 {
     width: 8px;
     background: #f8f9fa;
 }
+
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(90deg, #007bff, #00c6ff);
     border-radius: 8px;
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px);}
-    to { opacity: 1; transform: translateY(0);}
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Proje kartı hover'da renkli parıltı animasyonu */
 .card:hover {
-    box-shadow: 0 0 40px #00c6ff88, 0 12px 32px rgba(0,0,0,0.22);
+    box-shadow: 0 0 40px #00c6ff88, 0 12px 32px rgba(0, 0, 0, 0.22);
     border-color: #00c6ff;
     background: linear-gradient(120deg, #f8f9fa 80%, #e0eaff 100%);
 }
@@ -132,15 +294,18 @@ h2, h3, h4 {
     position: relative;
     overflow: hidden;
 }
+
 .nav-link::after {
     content: "";
     position: absolute;
-    left: 0; bottom: 0;
+    left: 0;
+    bottom: 0;
     width: 0;
     height: 2px;
     background: linear-gradient(90deg, #007bff, #00c6ff);
     transition: width 0.3s;
 }
+
 .nav-link:hover::after {
     width: 100%;
 }
@@ -149,19 +314,34 @@ h2, h3, h4 {
 .btn:active {
     animation: bounce 0.3s;
 }
+
 @keyframes bounce {
-    0%   { transform: scale(1);}
-    50%  { transform: scale(0.95);}
-    100% { transform: scale(1);}
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* Footer'da dalga animasyonu */
 footer::before {
     animation: waveMove 6s linear infinite;
 }
+
 @keyframes waveMove {
-    0%   { background-position-x: 0; }
-    100% { background-position-x: 200px; }
+    0% {
+        background-position-x: 0;
+    }
+
+    100% {
+        background-position-x: 200px;
+    }
 }
 
 /* Kart başlıklarına gölge */
@@ -174,6 +354,9 @@ body {
     opacity: 0;
     animation: bodyFadeIn 1s forwards;
 }
+
 @keyframes bodyFadeIn {
-    to { opacity: 1; }
+    to {
+        opacity: 1;
+    }
 }

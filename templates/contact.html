@@ -2,10 +2,23 @@
 {% block content %}
 <div class="container my-5">
     <h2 class="mb-4">İletişim</h2>
+
+    <!-- Flash mesajlarını göster -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <p>Aşağıdaki formu doldurarak veya iletişim bilgilerimizden bize ulaşabilirsiniz.</p>
 
-    <div class="row">
-        <div class="col-md-6">
+    <div class="row g-4">
+        <div class="col-12 col-md-6">
             <form action="/iletisim" method="post" class="p-4 border rounded bg-light shadow-sm">
                 <div class="mb-3">
                     <label for="name" class="form-label">Adınız Soyadınız:</label>
@@ -22,20 +35,30 @@
                 <button type="submit" class="btn btn-primary">Gönder</button>
             </form>
         </div>
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
             <div class="p-4 border rounded bg-white shadow-sm h-100">
                 <h3>İletişim Bilgilerimiz</h3>
                 <ul class="list-unstyled">
                     <li class="mb-2">
-                        <strong>Adres:</strong> Batıkent mah,kürşat,tüzmen bulvarı,açelya apartmanı altı,Şehitkamil Gaziantep
+                        <strong>Adres:</strong> Batıkent Mahallesi, Kürşat Tüzmen Bulvarı, Açelya Apartmanı Altı,
+                        Şehitkamil / Gaziantep
                     </li>
                     <li class="mb-2">
                         <strong>Telefon:</strong>
-                        <a href="tel:+905327385077" class="text-decoration-none">+90 342 322 19 33 </a>
+                        <a href="tel:+905327385077" class="text-decoration-none">+90 532 738 50 77</a>
+                    </li>
+                    <li class="mb-2">
+                        <strong>Telefon:</strong>
+                        <a href="tel:+905327311379" class="text-decoration-none">+90 532 731 13 79</a>
+                    </li>
+                    <li class="mb-2">
+                        <strong>Telefon:</strong>
+                        <a href="tel:+905334962112" class="text-decoration-none">+90 533 496 21 12</a>
                     </li>
                     <li class="mb-2">
                         <strong>E-posta:</strong>
-                        <a href="mailto:info@ornekinsaat.com" class="text-decoration-none">aydinlarinsaat@hotmail.com.tr</a>
+                        <a href="mailto:aydinlarinsaat@hotmail.com.tr"
+                            class="text-decoration-none">aydinlarinsaat@hotmail.com.tr</a>
                     </li>
                     <li>
                         <a href="https://wa.me/905327385077" target="_blank" class="btn btn-success">

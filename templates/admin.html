@@ -72,7 +72,7 @@
                                 <td>{{ card.order_index }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning"
-                                        onclick="editCard( card.id )">Düzenle</button>
+                                        onclick="editCard({{ card.id }})">Düzenle</button>
                                     <a href="/admin/delete_card/{{ card.id }}" class="btn btn-sm btn-danger"
                                         onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
                                 </td>
@@ -310,6 +310,43 @@
     </div>
 </div>
 
+<!-- Kart Düzenleme Modal -->
+<div class="modal fade" id="editCardModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kart Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="" method="post" id="editCardForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Başlık:</label>
+                        <input type="text" name="title" id="editTitle" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Açıklama:</label>
+                        <textarea name="description" id="editDescription" class="form-control" rows="3"
+                            required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Resim URL:</label>
+                        <input type="text" name="image_url" id="editImageUrl" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sıra:</label>
+                        <input type="number" name="order_index" id="editOrderIndex" class="form-control" value="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Proje Ekleme Modal -->
 <div class="modal fade" id="addProjectModal" tabindex="-1">
     <div class="modal-dialog">
@@ -380,7 +417,30 @@
     }
 
     function editCard(cardId) {
-        alert('Düzenleme özelliği yakında eklenecek!');
+        // Kart verilerini al ve modalı doldur
+        fetch(`/admin/edit_card/${cardId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('editTitle').value = data.title;
+                document.getElementById('editDescription').value = data.description;
+                document.getElementById('editImageUrl').value = data.image_url;
+                document.getElementById('editOrderIndex').value = data.order_index;
+                document.getElementById('editCardForm').action = `/admin/edit_card/${cardId}`;
+
+                // Modalı aç
+                var editModal = document.getElementById('editCardModal');
+                if (typeof bootstrap !== 'undefined') {
+                    var modal = new bootstrap.Modal(editModal);
+                    modal.show();
+                } else {
+                    // Bootstrap 5 kullanıyorsa
+                    $('#editCardModal').modal('show');
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                alert('Kart bilgileri yüklenirken hata oluştu!');
+            });
     }
 </script>
 {% endblock %}
